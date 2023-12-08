@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order: 
+  client: one
+  invoice_number: 
+  payment_method: 1
+
+two:
+  order: 
+  client: two
+  invoice_number: 
+  payment_method: 1

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_08_072447) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_08_074636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,13 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_072447) do
     t.bigint "user_id", null: false
     t.bigint "order_number", null: false
     t.index ["user_id"], name: "index_events_on_user_id"
+  end
+
+  create_table "invoices", primary_key: "invoice_number", force: :cascade do |t|
+    t.bigint "order_number"
+    t.integer "payment_method"
+    t.string "client_id", null: false
+    t.index ["client_id"], name: "index_invoices_on_client_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -79,6 +86,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_072447) do
 
   add_foreign_key "events", "orders", column: "order_number", primary_key: "order_number"
   add_foreign_key "events", "users"
+  add_foreign_key "invoices", "clients"
+  add_foreign_key "invoices", "orders", column: "order_number", primary_key: "order_number"
   add_foreign_key "items", "orders", column: "order_number", primary_key: "order_number"
   add_foreign_key "items", "products"
   add_foreign_key "orders", "tables"
