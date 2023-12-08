@@ -11,6 +11,7 @@ class User < ApplicationRecord
     'guess': 0,
     'cook': 1,
     'waiter': 2,
-    'cashier': 3
+    'cashier': 3,
+    'admin': 4
   }
 end
