@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :validatable
 
   has_many :orders, foreign_key: 'waiter_id'
+  has_many :events
 end
