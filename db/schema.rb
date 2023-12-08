@@ -10,29 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 20_231_208_063_516) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_08_064226) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension 'plpgsql'
+  enable_extension "plpgsql"
 
-  create_table 'clients', force: :cascade do |t|
-    t.string 'first_name'
-    t.string 'last_name'
-    t.string 'address'
-    t.string 'email'
-    t.string 'phone'
-    t.datetime 'date'
-    t.integer 'id_type'
+  create_table "clients", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address"
+    t.string "email"
+    t.string "phone"
+    t.datetime "date"
+    t.integer "id_type"
   end
 
-  create_table 'products', force: :cascade do |t|
-    t.string 'name'
-    t.string 'description'
-    t.decimal 'price', precision: 8, scale: 3
-    t.integer 'category'
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.decimal "price", precision: 8, scale: 3
+    t.integer "category"
   end
 
-  create_table 'tables', force: :cascade do |t|
-    t.integer 'status'
-    t.integer 'capacity'
+  create_table "tables", force: :cascade do |t|
+    t.integer "status"
+    t.integer "capacity"
   end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.integer "role", default: 0, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
 end
