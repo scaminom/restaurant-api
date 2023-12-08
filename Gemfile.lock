@@ -132,7 +132,12 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
       racc (~> 1.4)
+    oj (3.16.2)
+      bigdecimal (~> 3.1)
     orm_adapter (0.5.0)
+    panko_serializer (0.8.1)
+      activesupport
+      oj (> 3.11.0, < 4.0.0)
     pg (1.5.4)
     pg (1.5.4-x64-mingw-ucrt)
     psych (5.1.1.1)
@@ -209,6 +214,7 @@ DEPENDENCIES
   bootsnap
   debug
   devise
+  panko_serializer
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.2)
