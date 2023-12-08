@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: rt-api-test
+  username: postgres
+  password: root
+
+test:
+  <<: *default
+  database: rt-api-test-test
+  username: postgres
+  password: root
+
+production:
+  <<: *default
+  database: restaurant_api_production
+  username: postgresql
+  password: <%= ENV["RESTAURANT_API_DATABASE_PASSWORD"] %>
+
