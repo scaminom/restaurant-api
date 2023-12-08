@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_08_064226) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_08_070730) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,25 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_064226) do
     t.string "phone"
     t.datetime "date"
     t.integer "id_type"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.integer "quantity"
+    t.decimal "unit_price", precision: 8, scale: 3
+    t.decimal "subtotal", precision: 10, scale: 2
+    t.bigint "product_id", null: false
+    t.bigint "order_number", null: false
+    t.index ["product_id"], name: "index_items_on_product_id"
+  end
+
+  create_table "orders", primary_key: "order_number", force: :cascade do |t|
+    t.datetime "date"
+    t.integer "status"
+    t.decimal "total"
+    t.bigint "waiter_id"
+    t.bigint "table_id", null: false
+    t.index ["table_id"], name: "index_orders_on_table_id"
+    t.index ["waiter_id"], name: "index_orders_on_waiter_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -49,4 +68,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_08_064226) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "items", "orders", column: "order_number", primary_key: "order_number"
+  add_foreign_key "items", "products"
+  add_foreign_key "orders", "tables"
+  add_foreign_key "orders", "users", column: "waiter_id", on_delete: :restrict
 end
