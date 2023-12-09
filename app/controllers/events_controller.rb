@@ -1,51 +1,83 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[ show update destroy ]
+  before_action :set_event, only: %i[show update destroy]
 
-  # GET /events
   def index
     @events = Event.all
 
-    render json: @events
+    raise ActiveRecord::RecordNotFound, 'No events found' if @events.empty?
+
+    serialized_events = @events.map do |event|
+      event_serializer(event)
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { error: e.message, event_id: event.id }, status: :not_found
+      next
+    end
+
+    render json: { events: serialized_events }
+  rescue StandardError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
-  # GET /events/1
   def show
-    render json: @event
+    render json: { event: event_serializer(@event) } if stale?(@event)
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
   end
 
-  # POST /events
   def create
     @event = Event.new(event_params)
 
     if @event.save
-      render json: @event, status: :created, location: @event
+      render json: { event: event_serializer(@event) }, status: :accepted
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors.full_messages, status: :unprocessable_entity
     end
+  rescue StandardError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
-  # PATCH/PUT /events/1
   def update
     if @event.update(event_params)
-      render json: @event
+      render json: { event: event_serializer(@event) }
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
     end
+  rescue StandardError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
-  # DELETE /events/1
   def destroy
-    @event.destroy!
+    if @event.destroy
+      render json: { message: 'Event deleted successfully' }
+    else
+      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_event
-      @event = Event.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def event_params
-      params.require(:event).permit(:description, :event_type, :occurred_at, :user_id, :order)
+  def set_event
+    @event = Event.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
+  end
+
+  def event_params
+    params.require(:event).permit(:description, :event_type, :user_id, :order_number)
+  end
+
+  def event_serializer(event)
+    Rails.cache.fetch([cache_key(event), I18n.locale]) do
+      EventSerializer.new.serialize(event)
+    rescue StandardError => e
+      Rails.logger.error "Error serializing event #{event.id}: #{e.message}"
+      {}.as_json
     end
+  end
+
+  def cache_key(event)
+    "events/#{event.id}"
+  end
 end
