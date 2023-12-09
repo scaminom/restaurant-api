@@ -3,11 +3,6 @@ class InvoiceSerializer < Panko::Serializer
               :payment_method,
               :client
 
-  def order
-    object.order
-  end
-
-  def client
-    object.client
-  end
+  has_one :client,  serializer: ClientSerializer
+  has_one :order,   serializer: OrderSerializer
 end

@@ -1,15 +1,7 @@
 class ItemSerializer < Panko::Serializer
   attributes  :quantity,
               :unit_price,
-              :subtotal,
-              :product,
-              :order
+              :subtotal
 
-  def product
-    object.product
-  end
-
-  def order
-    object.order
-  end
+  has_one :product, serializer: ProductSerializer, only: %i[name]
 end
