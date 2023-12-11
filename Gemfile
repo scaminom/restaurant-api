@@ -12,4 +12,5 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do
   gem 'byebug'
+  gem 'rspec-rails', '~> 6.1.0'
 end

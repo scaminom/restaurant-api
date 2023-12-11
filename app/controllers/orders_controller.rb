@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   before_action :set_order, only: %i[show update destroy]
 
   def index
-    @orders = Order.all
+    orders = Order.all
 
     render json: Panko::ArraySerializer.new(
       orders, each_serializer: OrderSerializer
