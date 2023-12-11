@@ -21,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: |
           bundle install
+          
+      - name: Database setup
+        run: |
+          bundle exec rails db:schema:load --trace
 
-      - name: Run Order Tests
-        run: rspec
+      - name: Run Tests
+        run: |
+          bundle exec rspec
+
