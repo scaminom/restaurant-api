@@ -39,10 +39,14 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
+      - name: Check PostgreSQL Service Status
+        run: |
+            service postgresql status
+
       - name: Configure PostgreSQL
         run: |
-          rails db:create RAILS_ENV=test
-          rails db:migrate RAILS_ENV=test
+          bundle exec rake db:create RAILS_ENV=test
+          bundle exec rake db:migrate RAILS_ENV=test
 
       - name: Run Tests
         run: |
