@@ -9,6 +9,22 @@ jobs:
   test:
     runs-on: windows-latest
 
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB:   rt-api-test-test
+        ports:
+          - 5432:5432
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -22,8 +38,12 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
-          
+
+      - name: Configure PostgreSQL
+        run: |
+          rails db:create RAILS_ENV=test
+          rails db:migrate RAILS_ENV=test
+
       - name: Run Tests
         run: |
           bundle exec rspec
-
