@@ -14,8 +14,8 @@ jobs:
         image: postgres:10.8
         env:
           RAILS_ENV: test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: root
+          username: postgres
+          password: root
           POSTGRES_DB:   rt-api-test-test
         ports:
           - 5432:5432
@@ -52,8 +52,8 @@ jobs:
             
       - name: Create DB
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: root
+          username: postgres
+          passwprd: root
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: |
