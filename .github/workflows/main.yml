@@ -38,6 +38,9 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
+          
+      - name: Start PostgreSQL Service
+        run: sudo service postgresql start
 
       - name: Check PostgreSQL Service Status
         run: |
