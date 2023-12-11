@@ -16,7 +16,7 @@ jobs:
           RAILS_ENV: test
           username: postgres
           password: root
-          POSTGRES_DB:   rt-api-test-test
+          POSTGRES_DB: rt-api-test-test
         ports:
           - 5432:5432
         options: >-
@@ -39,25 +39,28 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
-          
+
       - name: Start PostgreSQL Service
         run: sudo service postgresql start
 
       - name: Check PostgreSQL Service Status
         run: |
-            service postgresql status
+          service postgresql status
+
       - name: Make bin/rails executable
-        run: |
-          chmod +x bin/rails
-            
+        run: chmod +x bin/rails
+
+      - name: Display Environment Variables
+        run: echo "RAILS_ENV=${{ env.RAILS_ENV }} PGPORT=${{ env.PGPORT }}"
+
       - name: Create DB
         env:
           username: postgres
-          passwprd: root
+          password: root
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
-        run: |
-            bin/rails db:create db:schema:load
+        run: bin/rails db:create db:schema:load
+
       - name: Run Tests
         run: |
           bundle exec rspec
