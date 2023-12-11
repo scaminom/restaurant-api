@@ -46,6 +46,10 @@ jobs:
       - name: Check PostgreSQL Service Status
         run: |
             service postgresql status
+
+      - name: Make bin/rails executable
+        run: |
+          chmod +x bin/rails
             
       - name: Create DB
         run: |
