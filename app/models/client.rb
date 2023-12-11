@@ -1,14 +1,14 @@
 class Client < ApplicationRecord
-  WHITELISTED_ATTRIBUTES = [
-    :id,
-    :first_name,
-    :last_name,
-    :address,
-    :email,
-    :phone,
-    :date,
-    :id_type
-  ].frozen
+  WHITELISTED_ATTRIBUTES = %i[
+    id
+    first_name
+    last_name
+    address
+    email
+    phone
+    date
+    id_type
+  ].freeze
 
   enum id_type: {
     'RUC': 1,
