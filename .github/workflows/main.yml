@@ -17,7 +17,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
           POSTGRES_DB:   rt-api-test-test
-          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
@@ -56,7 +55,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
           PGPORT: ${{ job.services.postgres.ports[5432] }}
-          POSTGRES_HOST_AUTH_METHOD: trust
           RAILS_ENV: test
         run: |
             bin/rails db:create db:schema:load
