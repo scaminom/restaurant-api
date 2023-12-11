@@ -21,7 +21,6 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --mount type=tmpfs,destination=/var/lib/postgresql/data
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
@@ -41,27 +40,15 @@ jobs:
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
-          
-      - name: Start PostgreSQL Service
-        run: sudo service postgresql start
 
-      - name: Check PostgreSQL Service Status
+      - name: Create and migrate database
         run: |
-            service postgresql status
+          bin/rails db:create db:schema:load
 
-      - name: Make bin/rails executable
+      - name: Run RSpec tests
         run: |
-          chmod +x bin/rails
-            
-      - name: Create DB
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: root
-          PGPORT: ${{ job.services.postgres.ports[5432] }}
-          POSTGRES_HOST_AUTH_METHOD: trust
-          RAILS_ENV: test
-        run: |
-            bin/rails db:create db:schema:load
+          bundle exec rspec
+
 
       - name: Run Tests
         run: |
