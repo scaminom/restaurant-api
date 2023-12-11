@@ -1,4 +1,10 @@
 class Order < ApplicationRecord
+  WHITELISTED_ATTRIBUTES = %i[
+    status
+    waiter_id
+    table_id
+  ].freeze
+
   belongs_to  :table
   belongs_to  :waiter, class_name: 'User', foreign_key: 'waiter_id'
   has_many    :items, foreign_key: 'order_number', primary_key: 'order_number'

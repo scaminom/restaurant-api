@@ -3,6 +3,7 @@ class ClientsController < ApplicationController
 
   def index
     clients = Client.all
+
     render json: Panko::ArraySerializer.new(
       clients, each_serializer: ClientSerializer
     ).to_json

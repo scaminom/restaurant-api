@@ -2,26 +2,14 @@ class InvoicesController < ApplicationController
   before_action :set_invoice, only: %i[show update destroy]
 
   def index
-    @invoices = Invoice.all
-
-    raise ActiveRecord::RecordNotFound, 'No invoices found' if @invoices.empty?
-
-    serialized_invoices = @invoices.map do |invoice|
-      invoice_serializer(invoice)
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, invoice_id: invoice.id }, status: :not_found
-      next
-    end
-
-    render json: { invoices: serialized_invoices }
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
+    invoices = Invoice.all
+    render json: Panko::ArraySerializer.new(
+      invoices, each_serializer: InvoiceSerializer
+    ).to_json
   end
 
   def show
-    render json: { invoice: invoice_serializer(@invoice) } if stale?(@invoice)
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
+    render json: { invoice: invoice_serializer(@invoice) }
   end
 
   def create
@@ -32,8 +20,6 @@ class InvoicesController < ApplicationController
     else
       render json: @invoice.errors.full_messages, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def update
@@ -42,8 +28,6 @@ class InvoicesController < ApplicationController
     else
       render json: { errors: @invoice.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def destroy
@@ -52,20 +36,16 @@ class InvoicesController < ApplicationController
     else
       render json: { errors: @invoice.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
 
   def set_invoice
     @invoice = Invoice.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
   end
 
   def invoice_params
-    params.require(:invoice).permit(:order_number, :payment_method, :client_id)
+    params.require(:invoice).permit(*Invoice::WHITELISTED_ATTRIBUTES)
   end
 
   def invoice_serializer(invoice)

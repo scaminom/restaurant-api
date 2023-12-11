@@ -2,26 +2,14 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[show update destroy]
 
   def index
-    @events = Event.all
-
-    raise ActiveRecord::RecordNotFound, 'No events found' if @events.empty?
-
-    serialized_events = @events.map do |event|
-      event_serializer(event)
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, event_id: event.id }, status: :not_found
-      next
-    end
-
-    render json: { events: serialized_events }
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
+    events = Event.all
+    render json: Panko::ArraySerializer.new(
+      events, each_serializer: EventSerializer
+    ).to_json
   end
 
   def show
-    render json: { event: event_serializer(@event) } if stale?(@event)
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
+    render json: { event: event_serializer(@event) }
   end
 
   def create
@@ -32,8 +20,6 @@ class EventsController < ApplicationController
     else
       render json: @event.errors.full_messages, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def update
@@ -42,8 +28,6 @@ class EventsController < ApplicationController
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def destroy
@@ -52,20 +36,16 @@ class EventsController < ApplicationController
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
 
   def set_event
     @event = Event.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
   end
 
   def event_params
-    params.require(:event).permit(:description, :event_type, :user_id, :order_number)
+    params.require(:event).permit(*Event::WHITELISTED_ATTRIBUTES)
   end
 
   def event_serializer(event)

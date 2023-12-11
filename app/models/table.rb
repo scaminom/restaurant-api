@@ -1,4 +1,9 @@
 class Table < ApplicationRecord
+  WHITELISTED_ATTRIBUTES = %i[
+    status
+    capacity
+  ].freeze
+
   has_one :order
 
   enum status: {

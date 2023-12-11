@@ -1,4 +1,10 @@
 class Item < ApplicationRecord
+  WHITELISTED_ATTRIBUTES = %i[
+    quantity
+    product_id
+    order_number
+  ].freeze
+
   belongs_to :product
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 

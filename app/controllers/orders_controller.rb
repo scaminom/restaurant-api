@@ -4,24 +4,13 @@ class OrdersController < ApplicationController
   def index
     @orders = Order.all
 
-    raise ActiveRecord::RecordNotFound, 'No orders found' if @orders.empty?
-
-    serialized_orders = @orders.map do |order|
-      order_serializer(order)
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, order_id: order.id }, status: :not_found
-      next
-    end
-
-    render json: { orders: serialized_orders }
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
+    render json: Panko::ArraySerializer.new(
+      orders, each_serializer: OrderSerializer
+    ).to_json
   end
 
   def show
     render json: { event: order_serializer(@order) } if stale?(@order)
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
   end
 
   def create
@@ -32,8 +21,6 @@ class OrdersController < ApplicationController
     else
       render json: @order.errors.full_messages, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def update
@@ -42,8 +29,6 @@ class OrdersController < ApplicationController
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def destroy
@@ -52,20 +37,16 @@ class OrdersController < ApplicationController
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
 
   def set_order
     @order = Order.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
   end
 
   def order_params
-    params.require(:order).permit(:date, :status, :waiter_id, :table_id)
+    params.require(:order).permit(*Order::WHITELISTED_ATTRIBUTES)
   end
 
   def order_serializer(order)

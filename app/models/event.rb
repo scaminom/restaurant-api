@@ -1,4 +1,11 @@
 class Event < ApplicationRecord
+  WHITELISTED_ATTRIBUTES = %i[
+    description
+    event_type
+    user_id
+    order_number
+  ].freeze
+
   belongs_to :user
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 

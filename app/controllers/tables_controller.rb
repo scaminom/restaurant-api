@@ -2,26 +2,15 @@ class TablesController < ApplicationController
   before_action :set_table, only: %i[show update destroy]
 
   def index
-    @tables = Table.all
+    tables = Table.all
 
-    raise ActiveRecord::RecordNotFound, 'No tables found' if @tables.empty?
-
-    serialized_tables = @tables.map do |table|
-      table_serializer(table)
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message, table_id: table.id }, status: :not_found
-      next
-    end
-
-    render json: { tables: serialized_tables }
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
+    render json: Panko::ArraySerializer.new(
+      tables, each_serializer: TableSerializer
+    ).to_json
   end
 
   def show
     render json: { table: table_serializer(@table) } if stale?(@table)
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
   end
 
   def create
@@ -32,8 +21,6 @@ class TablesController < ApplicationController
     else
       render json: @table.errors.full_messages, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def update
@@ -42,8 +29,6 @@ class TablesController < ApplicationController
     else
       render json: { errors: @table.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   def destroy
@@ -52,20 +37,16 @@ class TablesController < ApplicationController
     else
       render json: { errors: @table.errors.full_messages }, status: :unprocessable_entity
     end
-  rescue StandardError => e
-    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
 
   def set_table
     @table = Table.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
   end
 
   def table_params
-    params.require(:table).permit(:status, :capacity)
+    params.require(:table).permit(*Table::WHITELISTED_ATTRIBUTES)
   end
 
   def table_serializer(table)
