@@ -13,8 +13,9 @@ jobs:
       postgres:
         image: postgres:10.8
         env:
+          RAILS_ENV: test
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
+          POSTGRES_PASSWORD: root
           POSTGRES_DB:   rt-api-test-test
         ports:
           - 5432:5432
@@ -45,11 +46,10 @@ jobs:
       - name: Check PostgreSQL Service Status
         run: |
             service postgresql status
-
-      - name: Configure PostgreSQL
+            
+      - name: Create DB
         run: |
-          bundle exec rake db:create RAILS_ENV=test
-          bundle exec rake db:migrate RAILS_ENV=test
+            bin/rails db:prepare
 
       - name: Run Tests
         run: |
