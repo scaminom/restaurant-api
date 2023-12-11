@@ -40,6 +40,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows]
   gem 'devise'
   gem 'panko_serializer'
+  gem 'rack-cors'
 end
 
 group :development do

@@ -1,6 +1,8 @@
 class ProductSerializer < Panko::Serializer
-  attributes  :name,
+  attributes  :id,
+              :name,
               :description,
+              :image,
               :price,
               :category
 end
