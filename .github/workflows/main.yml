@@ -11,12 +11,9 @@ jobs:
 
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres
         env:
-          RAILS_ENV: test
-          POSTGRES_USER: postgres 
           POSTGRES_PASSWORD: root
-          POSTGRES_DB: rt-api-test-test
         ports:
           - 5432:5432
         options: >-
@@ -56,8 +53,9 @@ jobs:
       - name: Create DB
         env:
           POSTGRES_USER: postgres
+          POSTGRES_HOST: localhost
           POSTGRES_PASSWORD: root
-          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          POSTGRES_PORT: 5432
           RAILS_ENV: test
         run: bin/rails db:create db:schema:load
 
