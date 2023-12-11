@@ -37,6 +37,7 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
+<<<<<<< HEAD
       - name: Start PostgreSQL Service
         run: sudo service postgresql start
 
@@ -61,3 +62,7 @@ jobs:
 
       - name: Run Tests
         run: bundle exec rspec
+=======
+      - name: Run Tests
+        run: rspec
+>>>>>>> ca99c09 (Config database.yml)
