@@ -1,4 +1,5 @@
 class TableSerializer < Panko::Serializer
-  attributes :status,
-             :capacity
+  attributes  :id,
+              :status,
+              :capacity
 end

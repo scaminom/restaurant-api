@@ -7,6 +7,7 @@ gem 'devise'
 gem 'panko_serializer'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
+gem 'rack-cors'
 gem 'rails', '~> 7.1.2'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
