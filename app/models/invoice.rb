@@ -10,7 +10,7 @@ class Invoice < ApplicationRecord
   belongs_to :client
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 
-  validates :status, inclusion: { in: %w[cash transfer online], message: 'is not a valid payment_method' }
+  validates :payment_method, inclusion: { in: %w[cash transfer online], message: 'is not a valid payment_method' }
 
   enum payment_method: {
     'cash': 1,

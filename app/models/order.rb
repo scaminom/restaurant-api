@@ -13,7 +13,6 @@ class Order < ApplicationRecord
   has_many    :items, foreign_key: 'order_number', primary_key: 'order_number'
 
   before_save :set_date_time_now
-  before_save :set_status
   after_save  :set_table_status
   after_save  :create_items
 
@@ -21,7 +20,7 @@ class Order < ApplicationRecord
     'in_process': 1,
     'ready': 2,
     'completed': 3
-  }
+  }, _default: 'in_process'
 
   def calculate_total
     new_total = items.sum(&:subtotal)
@@ -36,10 +35,6 @@ class Order < ApplicationRecord
   end
 
   private
-
-  def set_status
-    self.status = 1
-  end
 
   def set_table_status
     table.update(status: 2)
