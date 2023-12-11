@@ -54,6 +54,9 @@ jobs:
       - name: Create DB
         run: |
             bin/rails db:prepare
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
 
       - name: Run Tests
         run: |
