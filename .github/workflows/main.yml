@@ -52,7 +52,7 @@ jobs:
       - name: Create DB
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://user:password@localhost:5432/rt-api-test-test
+          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
         run: |
           bin/rails db:create
           bin/rails db:schema:load
@@ -60,5 +60,5 @@ jobs:
       - name: Run Tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://user:password@localhost:5432/rt-api-test-test
+          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
         run: bundle exec rspec
