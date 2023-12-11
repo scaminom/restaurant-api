@@ -13,7 +13,9 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
+          POSTGRES_DB: rt-api-test-test
         ports:
           - 5432:5432
         options: >-
@@ -37,7 +39,6 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
-<<<<<<< HEAD
       - name: Start PostgreSQL Service
         run: sudo service postgresql start
 
@@ -47,22 +48,17 @@ jobs:
 
       - name: Make bin/rails executable
         run: chmod +x bin/rails
-
-      - name: Display Environment Variables
-        run: echo "RAILS_ENV=${{ env.RAILS_ENV }} POSTGRES_USER=${{ env.POSTGRES_USER }} POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }} PGPORT=${{ env.PGPORT }}"
-
+    
       - name: Create DB
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_HOST: localhost
-          POSTGRES_PASSWORD: root
-          POSTGRES_PORT: 5432
           RAILS_ENV: test
-        run: bin/rails db:create db:schema:load
+          DATABASE_URL: postgres://user:password@localhost:5432/rt-api-test-test
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load
 
       - name: Run Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://user:password@localhost:5432/rt-api-test-test
         run: bundle exec rspec
-=======
-      - name: Run Tests
-        run: rspec
->>>>>>> ca99c09 (Config database.yml)
