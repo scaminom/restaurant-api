@@ -14,8 +14,8 @@ jobs:
         image: postgres:10.8
         env:
           RAILS_ENV: test
-          username: postgres
-          password: root
+          POSTGRES_USER: postgres 
+          POSTGRES_PASSWORD: root
           POSTGRES_DB: rt-api-test-test
         ports:
           - 5432:5432
@@ -51,16 +51,15 @@ jobs:
         run: chmod +x bin/rails
 
       - name: Display Environment Variables
-        run: echo "RAILS_ENV=${{ env.RAILS_ENV }} PGPORT=${{ env.PGPORT }}"
+        run: echo "RAILS_ENV=${{ env.RAILS_ENV }} POSTGRES_USER=${{ env.POSTGRES_USER }} POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }} PGPORT=${{ env.PGPORT }}"
 
       - name: Create DB
         env:
-          username: postgres
-          password: root
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bin/rails db:create db:schema:load
 
       - name: Run Tests
-        run: |
-          bundle exec rspec
+        run: bundle exec rspec
