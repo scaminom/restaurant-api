@@ -10,7 +10,7 @@ class TablesController < ApplicationController
   end
 
   def show
-    render json: { table: table_serializer(@table) } if stale?(@table)
+    render json: { table: table_serializer(@table) }
   end
 
   def create

@@ -10,7 +10,7 @@ class OrdersController < ApplicationController
   end
 
   def show
-    render json: { event: order_serializer(@order) } if stale?(@order)
+    render json: { event: order_serializer(@order) }
   end
 
   def create

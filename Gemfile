@@ -4,6 +4,8 @@ ruby '3.2.2'
 
 gem 'bootsnap', require: false
 gem 'devise'
+gem 'factory_bot_rails'
+gem 'faker'
 gem 'panko_serializer'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'

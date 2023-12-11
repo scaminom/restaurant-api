@@ -5,6 +5,8 @@ class Item < ApplicationRecord
     order_number
   ].freeze
 
+  validates_presence_of :quantity, :product_id, :order_number
+
   belongs_to :product
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 
@@ -12,16 +14,16 @@ class Item < ApplicationRecord
   before_save :calculate_subtotal
   after_save  :update_order_total
 
+  def calculate_subtotal
+    self.subtotal = quantity * unit_price
+  end
+
   private
 
   def update_order_total
     return unless order.present?
 
     order.calculate_total
-  end
-
-  def calculate_subtotal
-    self.subtotal = quantity * unit_price
   end
 
   def set_unit_price

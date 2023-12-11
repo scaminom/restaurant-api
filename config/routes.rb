@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   resources :products
   resources :clients
 
-  match '*unmatched', to: 'application#not_found_method', via: :all
+  match '*unmatched', to: 'application#no_route_found', via: :all
 end

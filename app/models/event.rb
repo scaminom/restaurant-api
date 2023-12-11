@@ -6,8 +6,13 @@ class Event < ApplicationRecord
     order_number
   ].freeze
 
+  validates_presence_of :event_type, :user_id, :order_number
+
   belongs_to :user
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
+
+  validates :event_type,
+            inclusion: { in: %w[order_placed item_ready order_completed], message: 'is not a valid order type' }
 
   enum event_type: {
     'order_placed': 1,

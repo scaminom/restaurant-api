@@ -4,9 +4,11 @@ class Table < ApplicationRecord
     capacity
   ].freeze
 
-  has_one :order
-
+  validates_presence_of :status
   validate :validate_table_limit, on: :create
+  validates :status, inclusion: { in: %w[free occupied], message: 'is not a valid status' }
+
+  has_one :order
 
   enum status: {
     'free': 1,

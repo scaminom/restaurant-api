@@ -17,7 +17,7 @@ class ProductsController < ApplicationController
     @product = Product.new(product_params)
 
     if @product.save
-      render json: { product: product_serializer(@product) }
+      render json: { product: product_serializer(@product) }, status: :accepted
     else
       render json: @product.errors.full_messages, status: :unprocessable_entity
     end

@@ -4,7 +4,11 @@ class Product < ApplicationRecord
     description
     price
     category
+    image
   ].freeze
+
+  validates_presence_of :name, :price, :category, :image
+  validates :category, inclusion: { in: %w[food drink], message: 'is not a valid category' }
 
   has_many :items
 
