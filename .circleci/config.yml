@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  ruby: circleci/ruby@1.1.2
-  postgres: circleci/postgres@1.0.0
+  ruby: circleci/ruby@2.1.0
+  postgres: circleci/postgres@1.2.0
 
 jobs:
   build_and_test:
@@ -39,3 +39,4 @@ workflows:
   build_and_test_workflow:
     jobs:
       - build_and_test
+
