@@ -9,12 +9,17 @@ default: &default
 development:
   <<: *default
   database: rt-api-test
+  username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || 'root' %>
 
 test:
   <<: *default
   database: rt-api-test-test
+  username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || 'root' %>
 
 production:
   <<: *default
   database: restaurant_api_production
-  port: 5432
+  username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || 'root' %>
