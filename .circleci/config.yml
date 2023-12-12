@@ -12,6 +12,12 @@ jobs:
       - checkout
 
       - run:
+          name: Configure sudo to not prompt for a password
+          command: |
+            echo "circleci ALL=(ALL:ALL) NOPASSWD:/usr/bin/psql" | sudo tee -a /etc/sudoers.d/circleci
+            sudo chmod 440 /etc/sudoers.d/circleci
+
+      - run:
           name: Set up Ruby
           command: |
             sudo apt-get update -y
