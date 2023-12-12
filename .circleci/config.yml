@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: postgres
+      - image: circleci/ruby:3.2.2
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
@@ -12,22 +12,9 @@ jobs:
       - checkout
 
       - run:
-          name: Install Git and SSH
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y git openssh-client
-
-      - run:
-          name: Setup SSH keys
-          command: |
-            mkdir -p ~/.ssh
-            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - run:
           name: Set up Ruby
           command: |
+            sudo apt-get update -y
             sudo apt-get install -y ruby-full
             gem install bundler
 
