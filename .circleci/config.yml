@@ -14,6 +14,7 @@ jobs:
       - run:
           name: Install Git and SSH
           command: |
+            sudo apt-get update -y
             sudo apt-get install -y git openssh-client
 
       - run:
@@ -23,13 +24,10 @@ jobs:
             echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
-            git config --global user.email "jcamino7758@uta.edu.ec"
-            git config --global user.name "scaminom"
 
       - run:
           name: Set up Ruby
           command: |
-            sudo apt-get update -y
             sudo apt-get install -y ruby-full
             gem install bundler
 
