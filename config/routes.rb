@@ -8,5 +8,12 @@ Rails.application.routes.draw do
   resources :products
   resources :clients
 
+  resources :tables do
+    member do
+      post 'occupy'
+      post 'release'
+    end
+  end
+
   match '*unmatched', to: 'application#no_route_found', via: :all
 end
