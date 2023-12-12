@@ -1,9 +1,5 @@
 version: 2.1
 
-orbs:
-  ruby: circleci/ruby
-  postgres: circleci/postgres
-
 jobs:
   build:
     docker:
