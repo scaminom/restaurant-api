@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: rt-api-test-test
+        ports:
+          - 5432:5432
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Start PostgreSQL Service
+        run: sudo service postgresql start
+
+      - name: Check PostgreSQL Service Status
+        run: |
+          service postgresql status
+
+      - name: Make bin/rails executable
+        run: chmod +x bin/rails
+    
+      - name: Create DB
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load
+
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
+        run: bundle exec rspec
