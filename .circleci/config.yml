@@ -11,13 +11,10 @@ jobs:
     steps:
       - checkout
 
-
       - run:
           name: Install Git and SSH
           command: |
-            sudo apt-get update -y
             sudo apt-get install -y git openssh-client
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - run:
           name: Setup SSH keys
