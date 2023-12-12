@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   ruby: circleci/ruby@2.1.0
-  postgres: onehq/postgres@1.1.0
+  clone-postgresql: monoid/clone-postgresql@0.0.1
 
 jobs:
   build_and_test:
