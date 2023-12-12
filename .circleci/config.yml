@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/ruby:3.2.2
+      - image: cimg/ruby:3.2.2
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
