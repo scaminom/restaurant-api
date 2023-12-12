@@ -39,9 +39,9 @@ jobs:
           command: sudo service postgresql start
 
       - run:
-          name: Change PostgreSQL Username
+          name: Change PostgreSQL User Password
           command: |
-            sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD 'root';"
+            sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'root';"
 
       - run:
           name: Check PostgreSQL Service Status
