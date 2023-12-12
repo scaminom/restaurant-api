@@ -17,6 +17,4 @@ test:
 production:
   <<: *default
   database: restaurant_api_production
-  username: postgresql
-  password: <%= ENV["RESTAURANT_API_DATABASE_PASSWORD"] %>
   port: 5432
