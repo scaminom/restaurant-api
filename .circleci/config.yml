@@ -1,34 +1,61 @@
 version: 2.1
+on:
+  -push
 
 jobs:
-  build:
-    docker:
-      - image: cimg/ruby:3.2.2  # Ruby version
-      - image: circleci/postgres:latest  # PostgreSQL version
-        environment:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
           POSTGRES_DB: rt-api-test-test
-
-    working_directory: ~/repo
-
+        ports:
+          - 5432:5432
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - checkout
+      - name: Check out code
+        uses: actions/checkout@v3
 
-      - ruby/install-deps
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
 
-      - run: 
-          name: Set up Database
-          command: |
-            sudo apt-get install libpq-dev
-            bundle exec rails db:create db:schema:load
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
 
-      - run:
-          name: Run Tests
-          command: bundle exec rspec
+      - name: Start PostgreSQL Service
+        run: sudo service postgresql start
 
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
+      - name: Check PostgreSQL Service Status
+        run: |
+          service postgresql status
+
+      - name: Make bin/rails executable
+        run: chmod +x bin/rails
+    
+      - name: Create DB
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load
+
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
+        run: bundle exec rspec
