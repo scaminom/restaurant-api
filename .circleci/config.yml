@@ -24,6 +24,11 @@ jobs:
             bundle install --jobs 4 --retry 3
 
       - run:
+          name: Install PostgreSQL
+          command: |
+            sudo apt-get install -y postgresql postgresql-contrib
+
+      - run:
           name: Start PostgreSQL Service
           command: sudo service postgresql start
 
