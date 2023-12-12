@@ -1,64 +1,38 @@
-name: CI
+version: 2.1
 
-on:
-  push:
-    branches:
-      - main
+orbs:
+  ruby: circleci/ruby@1.1.2
+  postgres: circleci/postgres@1.0.0
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres
-        env:
+  build:
+    docker:
+      - image: cimg/ruby:3.2.2  # Ruby version
+      - image: circleci/postgres:latest  # PostgreSQL version
+        environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
           POSTGRES_DB: rt-api-test-test
-        ports:
-          - 5432:5432
-        options: >-
-          --mount type=tmpfs,destination=/var/lib/postgresql/data
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+
+    working_directory: ~/repo
+
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
+      - checkout
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.2
-          bundler-cache: true
+      - ruby/install-deps
 
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3
+      - run: 
+          name: Set up Database
+          command: |
+            sudo apt-get install libpq-dev
+            bundle exec rails db:create db:schema:load
 
-      - name: Start PostgreSQL Service
-        run: sudo service postgresql start
+      - run:
+          name: Run Tests
+          command: bundle exec rspec
 
-      - name: Check PostgreSQL Service Status
-        run: |
-          service postgresql status
-
-      - name: Make bin/rails executable
-        run: chmod +x bin/rails
-    
-      - name: Create DB
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
-        run: |
-          bin/rails db:create
-          bin/rails db:schema:load
-
-      - name: Run Tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:root@localhost:5432/rt-api-test-test
-        run: bundle exec rspec
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
