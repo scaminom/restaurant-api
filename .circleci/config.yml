@@ -2,7 +2,6 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/ruby:3.2.2
       - image: postgres
         environment:
           POSTGRES_USER: postgres
@@ -11,6 +10,17 @@ jobs:
 
     steps:
       - checkout
+
+
+      - run:
+          name: Setup SSH keys
+          command: |
+            mkdir -p ~/.ssh
+            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            git config --global user.email "jcamino7758@uta.edu.ec"
+            git config --global user.name "scaminom"
 
       - run:
           name: Set up Ruby
