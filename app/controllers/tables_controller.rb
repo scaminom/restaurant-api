@@ -39,6 +39,22 @@ class TablesController < ApplicationController
     end
   end
 
+  def occupy
+    if @table.update(status: 'occupied')
+      render json: { table: table_serializer(@table) }
+    else
+      render json: { errors: @table.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def release
+    if @table.update(status: 'free')
+      render json: { table: table_serializer(@table) }
+    else
+      render json: { errors: @table.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_table
