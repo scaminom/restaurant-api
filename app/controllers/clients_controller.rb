@@ -9,36 +9,6 @@ class ClientsController < ApplicationController
     ).to_json
   end
 
-  def show
-    render json: { client: client_serializer(@client) }
-  end
-
-  def create
-    @client = Client.new(client_params)
-
-    if @client.save
-      render json: { client: client_serializer(@client) }, status: :accepted
-    else
-      render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    if @client.update(client_params)
-      render json: { client: client_serializer(@client) }
-    else
-      render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    if @client.destroy
-      render json: { message: 'Client deleted successfully' }
-    else
-      render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def set_client

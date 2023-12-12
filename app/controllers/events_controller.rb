@@ -1,43 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: %i[show update destroy]
 
-  def index
-    events = Event.all
-    render json: Panko::ArraySerializer.new(
-      events, each_serializer: EventSerializer
-    ).to_json
-  end
-
-  def show
-    render json: { event: event_serializer(@event) }
-  end
-
-  def create
-    @event = Event.new(event_params)
-
-    if @event.save
-      render json: { event: event_serializer(@event) }, status: :accepted
-    else
-      render json: @event.errors.full_messages, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    if @event.update(event_params)
-      render json: { event: event_serializer(@event) }
-    else
-      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    if @event.destroy
-      render json: { message: 'Event deleted successfully' }
-    else
-      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def set_event
