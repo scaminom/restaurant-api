@@ -12,7 +12,7 @@ jobs:
 
       - run:
           name: Set Environment Variable
-          command: echo 'export SECRET_KEY_BASE= 9cffc6bbb463930b8c3f277963f343c4c644024515eb610d0c321a47f1e0d08bf549b3ac92147bd522988a1cf92d45f29baf38c310489190523bc3d8800f7645' >> $BASH_ENV
+          command: echo 'export SECRET_KEY_BASE=9cffc6bbb463930b8c3f277963f343c4c644024515eb610d0c321a47f1e0d08bf549b3ac92147bd522988a1cf92d45f29baf38c310489190523bc3d8800f7645' >> $BASH_ENV
 
       - run:
           name: Configure sudo to not prompt for a password
