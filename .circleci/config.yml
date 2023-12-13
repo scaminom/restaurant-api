@@ -7,6 +7,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
           POSTGRES_DB: rt-api-test-test
+          SECRET_KEY_BASE: ${SECRET_KEY_BASE}
 
     steps:
       - checkout
