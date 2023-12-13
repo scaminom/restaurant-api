@@ -11,6 +11,13 @@ jobs:
       - checkout
 
       - run:
+          name: Set Environment Variables
+          command: |
+            echo 'export RAILS_ENV=production' >> $BASH_ENV
+            echo 'export SECRET_KEY_BASE=your_secret_key_here' >> $BASH_ENV
+            echo 'export ANOTHER_VARIABLE=value' >> $BASH_ENV
+
+      - run:
           name: Configure sudo to not prompt for a password
           command: |
             echo "circleci ALL=(ALL:ALL) NOPASSWD:/usr/bin/psql" | sudo tee -a /etc/sudoers.d/circleci
