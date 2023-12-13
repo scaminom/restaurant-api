@@ -14,7 +14,7 @@ jobs:
           name: Set Environment Variables
           command: |
             echo 'export RAILS_ENV=production' >> $BASH_ENV
-            echo 'export SECRET_KEY_BASE=your_secret_key_here' >> $BASH_ENV
+            echo 'export SECRET_KEY_BASE= 9cffc6bbb463930b8c3f277963f343c4c644024515eb610d0c321a47f1e0d08bf549b3ac92147bd522988a1cf92d45f29baf38c310489190523bc3d8800f7645' >> $BASH_ENV
             echo 'export ANOTHER_VARIABLE=value' >> $BASH_ENV
 
       - run:
