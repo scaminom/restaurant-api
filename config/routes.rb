@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
+  resources :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
+  resources :users
   resources :invoices
   resources :events
   resources :items
   resources :orders
-  devise_for :users
   resources :tables
   resources :products
   resources :clients
