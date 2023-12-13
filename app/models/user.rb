@@ -1,17 +1,26 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  include Devise::JWT::RevocationStrategies::JTIMatcher
   devise :database_authenticatable, :registerable,
-         :validatable
+         :recoverable, :rememberable, :validatable,
+         :database_authenticatable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
 
-  has_many :orders, foreign_key: 'waiter_id'
-  has_many :events
+  WHITELISTED_ATTRIBUTES = %i[
+    username
+    email
+    password
+    role
+    first_name
+    last_name
+  ].freeze
 
   enum role: {
-    'guess': 0,
-    'cook': 1,
-    'waiter': 2,
-    'cashier': 3,
-    'admin': 4
+    'admin': 1,
+    'cook': 2,
+    'waiter': 3
   }
+
+  def jwt_payload
+    super
+  end
 end

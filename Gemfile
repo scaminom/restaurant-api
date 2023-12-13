@@ -4,6 +4,7 @@ ruby '3.2.2'
 
 gem 'bootsnap', require: false
 gem 'devise'
+gem 'devise-jwt'
 gem 'factory_bot_rails'
 gem 'faker'
 gem 'panko_serializer'
