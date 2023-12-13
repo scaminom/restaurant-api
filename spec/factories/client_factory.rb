@@ -9,4 +9,3 @@ FactoryBot.define do
     id_type { Faker::Number.between(from: 1, to: 2) }
   end
 end
-
