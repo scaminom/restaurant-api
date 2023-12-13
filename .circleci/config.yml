@@ -11,10 +11,6 @@ jobs:
       - checkout
 
       - run:
-          name: Print Environment Variables
-          command: printenv | grep -v SECRET_KEY_BASE
-
-      - run:
           name: Configure sudo to not prompt for a password
           command: |
             echo "circleci ALL=(ALL:ALL) NOPASSWD:/usr/bin/psql" | sudo tee -a /etc/sudoers.d/circleci
