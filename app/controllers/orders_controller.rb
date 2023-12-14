@@ -14,7 +14,8 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(order_params)
+    order_service = CreateOrderService.new(order_params)
+    @order = order_service.call
 
     if @order.save
       render json: { order: order_serializer(@order) }, status: :accepted
@@ -46,7 +47,7 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(*Order::WHITELISTED_ATTRIBUTES)
+    params.require(:order).permit(:table_id, :waiter_id, items: %i[product_id quantity])
   end
 
   def order_serializer(order)

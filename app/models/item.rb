@@ -18,15 +18,15 @@ class Item < ApplicationRecord
     self.subtotal = quantity * unit_price
   end
 
+  def set_unit_price
+    self.unit_price = product.price
+  end
+
   private
 
   def update_order_total
     return unless order.present?
 
     order.calculate_total
-  end
-
-  def set_unit_price
-    self.unit_price = product.price
   end
 end
