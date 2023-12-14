@@ -1,9 +1,9 @@
 class Order < ApplicationRecord
-  WHITELISTED_ATTRIBUTES = %i[
-    status
-    waiter_id
-    table_id
-  ].freeze
+  # WHITELISTED_ATTRIBUTES = %i[
+  #   status
+  #   waiter_id
+  #   table_id
+  # ].freeze
 
   validates_presence_of :status, :waiter_id, :table_id
   validates :status, inclusion: { in: %w[in_process ready completed], message: 'is not a valid status' }
