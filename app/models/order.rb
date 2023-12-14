@@ -14,7 +14,6 @@ class Order < ApplicationRecord
 
   before_save :set_date_time_now
   after_save  :set_table_status
-  after_save  :create_items
 
   enum status: {
     'in_process': 1,
@@ -23,11 +22,12 @@ class Order < ApplicationRecord
   }, _default: 'in_process'
 
   def calculate_total
+    items.reload
     new_total = items.sum(&:subtotal)
 
-    return unless new_total != total
+    return if new_total == total
 
-    update_column(:total, new_total)
+    update(total: new_total)
   end
 
   def set_date_time_now
@@ -38,12 +38,5 @@ class Order < ApplicationRecord
 
   def set_table_status
     table.update(status: 2)
-  end
-
-  def create_items
-    items.each do |item|
-      item.order_number = order_number
-      item.save
-    end
   end
 end

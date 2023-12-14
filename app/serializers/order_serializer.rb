@@ -6,5 +6,5 @@ class OrderSerializer < Panko::Serializer
 
   has_one :waiter, serializer: UserSerializer, only: %i[username email]
   has_one :table, serializer: TableSerializer
-  has_many :items, each_serializer: ItemSerializer, only: %i[quantity subtotal]
+  has_many :items, each_serializer: ItemSerializer, only: %i[id quantity subtotal]
 end
