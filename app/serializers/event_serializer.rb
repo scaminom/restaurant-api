@@ -1,8 +1,8 @@
 class EventSerializer < Panko::Serializer
   attributes  :description,
               :event_type,
-              :ocurred_at
+              :occurred_at
 
   has_one :user, serializer: UserSerializer, only: %i[username email]
-  has_one :order, serializer: OrderSerializer, only: %i[status total]
+  has_one :order, serializer: OrderSerializer, only: %i[order_number status total]
 end

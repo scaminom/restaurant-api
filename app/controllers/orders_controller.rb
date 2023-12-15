@@ -1,3 +1,5 @@
+# require_dependency '../services/post/create_order_whisper.rb'
+
 class OrdersController < ApplicationController
   before_action :set_order, only: %i[show update destroy]
 
@@ -14,10 +16,13 @@ class OrdersController < ApplicationController
   end
 
   def create
-    order_service = CreateOrderService.new(order_params)
-    @order = order_service.call
+    order_creator = OrderCreator.new(order_params)
+    @order = order_creator.call
 
     if @order.save
+      order_publisher = Services::Post::CreateOrderWhisper.new
+      order_publisher.publish_order_creation(@order)
+      order_publisher.subscribe(Listeners::CreateEventListener.new.order_created(@order))
       render json: { order: order_serializer(@order) }, status: :accepted
     else
       render json: @order.errors.full_messages, status: :unprocessable_entity
@@ -26,6 +31,9 @@ class OrdersController < ApplicationController
 
   def update
     if @order.update(order_params)
+      order_publisher = Services::Post::CreateOrderWhisper.new
+      order_publisher.publish_order_creation(@order)
+      order_publisher.subscribe(Listeners::UpdateEventListener.new.order_created(@order))
       render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
@@ -47,7 +55,7 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:table_id, :waiter_id, items: %i[product_id quantity])
+    params.require(:order).permit(*Order::WHITELISTED_ATTRIBUTES)
   end
 
   def order_serializer(order)

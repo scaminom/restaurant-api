@@ -1,4 +1,4 @@
-class CreateOrderService
+class OrderCreator
   def initialize(order_params)
     @order_params = order_params
   end
