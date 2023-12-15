@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_13_225748) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_15_061854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_13_225748) do
     t.decimal "subtotal", precision: 10, scale: 2
     t.bigint "product_id", null: false
     t.bigint "order_number", null: false
+    t.integer "status"
     t.index ["product_id"], name: "index_items_on_product_id"
   end
 

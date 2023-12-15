@@ -6,21 +6,17 @@ class Item < ApplicationRecord
   ].freeze
 
   validates_presence_of :quantity, :product_id, :order_number
+  validates :status, inclusion: { in: %w[in_process completed], message: 'is not a valid status' }
 
   belongs_to :product
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 
-  before_save :set_unit_price
-  before_save :calculate_subtotal
-  after_save  :update_order_total
+  after_save :update_order_total
 
-  def calculate_subtotal
-    self.subtotal = quantity * unit_price
-  end
-
-  def set_unit_price
-    self.unit_price = product.price
-  end
+  enum status: {
+    'in_process': 1,
+    'completed': 2
+  }
 
   private
 
