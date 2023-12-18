@@ -1,4 +1,4 @@
-# require_dependency '../services/post/create_order_whisper.rb'
+require_dependency '../services/post/create_order_whisper.rb'
 
 class OrdersController < ApplicationController
   before_action :set_order, only: %i[show update destroy]
@@ -23,6 +23,7 @@ class OrdersController < ApplicationController
       order_publisher = Services::Post::CreateOrderWhisper.new
       order_publisher.publish_order_creation(@order)
       order_publisher.subscribe(Listeners::CreateEventListener.new.order_created(@order))
+      # Order.process_next_order
       render json: { order: order_serializer(@order) }, status: :accepted
     else
       render json: @order.errors.full_messages, status: :unprocessable_entity

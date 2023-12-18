@@ -20,8 +20,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_15_061854) do
     t.string "address"
     t.string "email"
     t.string "phone"
-    t.datetime "date"
     t.integer "id_type"
+    t.datetime "timestamps"
   end
 
   create_table "events", force: :cascade do |t|
@@ -36,6 +36,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_15_061854) do
   create_table "invoices", primary_key: "invoice_number", force: :cascade do |t|
     t.bigint "order_number"
     t.integer "payment_method"
+    t.datetime "date"
     t.string "client_id", null: false
     t.index ["client_id"], name: "index_invoices_on_client_id"
   end
@@ -46,16 +47,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_15_061854) do
     t.decimal "subtotal", precision: 10, scale: 2
     t.bigint "product_id", null: false
     t.bigint "order_number", null: false
-    t.integer "status"
+    t.boolean "dispatched"
     t.index ["product_id"], name: "index_items_on_product_id"
   end
 
   create_table "orders", primary_key: "order_number", force: :cascade do |t|
-    t.datetime "date"
-    t.integer "status"
+    t.integer "status", default: 1
     t.decimal "total"
     t.bigint "waiter_id"
     t.bigint "table_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["table_id"], name: "index_orders_on_table_id"
     t.index ["waiter_id"], name: "index_orders_on_waiter_id"
   end
