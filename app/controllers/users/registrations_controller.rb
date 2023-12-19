@@ -1,28 +1,26 @@
 # frozen_string_literal: true
 
-class Users::SessionsController < Devise::SessionsController
+class Users::RegistrationsController < Devise::RegistrationsController
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   respond_to :json
 
   private
 
-  def respond_with(_resource, _options = {})
-    render json: {
-      status: { code: 200, message: 'User signed in successfully', data: { email: current_user.email, first_name:
-        current_user.first_name, last_name: current_user.last_name, role: current_user.role } }
-    }
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: User::WHITELISTED_ATTRIBUTES)
   end
 
-  def respond_to_on_destroy
-    jwt_payload = JWT.decode(request.headers['Authorization'].split(' ')[1],
-                             Rails.application.credentials.fetch(:secret_key_base)).first
-    current_user = User.find(jwt_payload['sub'])
-    if current_user
+  def respond_with(resource, _options = {})
+    puts resource.inspect
+    if resource.persisted?
       render json: {
-        status: { code: 200, message: 'User signed out successfully' }
+        status: { code: 200, message: 'Signed up successfully', data: resource }
       }
     else
       render json: {
-        status: { code: 401, message: 'User has no active session' }
+        status: { message: 'User could not be created successfully', errors: resource.errors.full_messages,
+                  status: :unprocessable_entity }
       }
     end
   end
