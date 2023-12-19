@@ -28,5 +28,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :orders do
+    member do
+      put 'ready'
+    end
+  end
+
   match '*unmatched', to: 'application#no_route_found', via: :all
 end

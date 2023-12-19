@@ -1,7 +1,7 @@
 require_dependency '../services/post/create_order_whisper.rb'
 
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[show update destroy]
+  before_action :set_order, only: %i[show update destroy ready]
 
   def index
     orders = Order.all
@@ -21,9 +21,10 @@ class OrdersController < ApplicationController
 
     if @order.save
       order_publisher = Services::Post::CreateOrderWhisper.new
+      create_event_listener = Listeners::CreateEventListener.new
       order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(Listeners::CreateEventListener.new.order_created(@order))
-      order_publisher.subscribe(Listeners::CreateEventListener.new.create_channel_order(@order))
+      order_publisher.subscribe(create_event_listener.order_created(@order))
+      order_publisher.subscribe(create_event_listener.create_channel_order(@order))
       render json: { order: order_serializer(@order) }, status: :accepted
     else
       render json: @order.errors.full_messages, status: :unprocessable_entity
@@ -33,9 +34,10 @@ class OrdersController < ApplicationController
   def update
     if @order.update(order_params)
       order_publisher = Services::Post::CreateOrderWhisper.new
+      update_event_listener = Listeners::UpdateEventListener.new
       order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(Listeners::UpdateEventListener.new.order_created(@order))
-      order_publisher.subscribe(Listeners::CreateEventListener.new.create_channel_order(@order))
+      order_publisher.subscribe(update_event_listener.order_created(@order))
+      order_publisher.subscribe(update_event_listener.create_channel_order(@order))
       render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
@@ -45,6 +47,19 @@ class OrdersController < ApplicationController
   def destroy
     if @order.destroy
       render json: { message: 'order deleted successfully' }
+    else
+      render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def ready
+    if @order.update(order_params)
+      order_publisher = Services::Post::CreateOrderWhisper.new
+      update_event_listener = Listeners::UpdateEventListener.new
+      order_publisher.publish_order_creation(@order)
+      order_publisher.subscribe(update_event_listener.order_created(@order))
+      order_publisher.subscribe(update_event_listener.create_channel_order(@order))
+      render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
     end

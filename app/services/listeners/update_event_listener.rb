@@ -5,9 +5,9 @@ module Listeners
                    description: 'Order is ready to delivery')
     end
 
-    def create_channel_order(_order)
+    def create_channel_order(order)
       ActionCable.server.broadcast('orders_channel',
-                                   'Order created')
+                                   "Order #{order.order_number} esta lista para entregar")
     end
   end
 end
