@@ -13,7 +13,6 @@ class Order < ApplicationRecord
   belongs_to  :waiter, class_name: 'User', foreign_key: 'waiter_id'
   has_many    :items, foreign_key: 'order_number', primary_key: 'order_number'
 
-  after_save  :set_table_status
   # after_update :handle_completion
 
   enum status: {
@@ -37,10 +36,6 @@ class Order < ApplicationRecord
   end
 
   private
-
-  def set_table_status
-    table.update(status: 2)
-  end
 
   def handle_completion
     return unless completed?
