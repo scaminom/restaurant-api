@@ -16,7 +16,8 @@ class Order < ApplicationRecord
   enum status: {
     'pending': 1,
     'in_process': 2,
-    'completed': 3
+    'ready': 3,
+    'completed': 4
   }
 
   def calculate_total

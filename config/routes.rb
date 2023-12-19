@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   resources :orders do
     member do
       put 'ready'
+      put 'in_process'
     end
   end
 

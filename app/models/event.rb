@@ -18,8 +18,9 @@ class Event < ApplicationRecord
 
   enum event_type: {
     'order_placed': 1,
-    'item_ready': 2,
-    'order_completed': 3
+    'order_ready': 2,
+    'order_in_process': 3,
+    'order_completed': 4
   }
 
   private

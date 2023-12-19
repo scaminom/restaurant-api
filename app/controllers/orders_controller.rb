@@ -53,12 +53,26 @@ class OrdersController < ApplicationController
   end
 
   def ready
-    if @order.update(order_params)
+    @order.update(status: params[:status])
+    if @order.status == 'completed'
       order_publisher = Services::Post::CreateOrderWhisper.new
       update_event_listener = Listeners::UpdateEventListener.new
       order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(update_event_listener.order_created(@order))
-      order_publisher.subscribe(update_event_listener.create_channel_order(@order))
+      order_publisher.subscribe(update_event_listener.order_ready(@order))
+      order_publisher.subscribe(update_event_listener.create_channel_order_ready(@order))
+      render json: { order: order_serializer(@order) }
+    else
+      render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def in_process
+    @order.update(status: params[:status])
+    if @order.status == 'in_process'
+      order_publisher = Services::Post::CreateOrderWhisper.new
+      update_event_listener = Listeners::UpdateEventListener.new
+      order_publisher.publish_order_creation(@order)
+      order_publisher.subscribe(update_event_listener.order_in_process(@order))
       render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
