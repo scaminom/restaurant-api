@@ -1,7 +1,7 @@
 require_dependency '../services/post/create_order_whisper.rb'
 
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[show update destroy ready]
+  before_action :set_order, only: %i[show update destroy ready in_process]
 
   def index
     orders = Order.all
