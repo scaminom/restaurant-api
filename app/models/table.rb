@@ -1,5 +1,6 @@
 class Table < ApplicationRecord
   WHITELISTED_ATTRIBUTES = %i[
+    id
     status
     capacity
   ].freeze
