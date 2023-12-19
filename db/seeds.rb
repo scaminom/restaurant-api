@@ -20,7 +20,7 @@ end
   )
 end
 
-10.times do
+7.times do
   Table.create(
     status: %w[free occupied].sample,
     capacity: Faker::Number.between(from: 2, to: 10)
