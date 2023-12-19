@@ -7,7 +7,7 @@ class Order < ApplicationRecord
   ].freeze
 
   validates_presence_of :status, :waiter_id, :table_id
-  validates :status, inclusion: { in: %w[in_process pending completed], message: 'is not a valid status' }
+  validates :status, inclusion: { in: %w[ready in_process pending completed], message: 'is not a valid status' }
 
   belongs_to  :table
   belongs_to  :waiter, class_name: 'User', foreign_key: 'waiter_id'
