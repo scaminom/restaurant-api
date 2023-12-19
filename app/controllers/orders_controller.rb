@@ -53,8 +53,8 @@ class OrdersController < ApplicationController
   end
 
   def ready
-    @order.update(status: params[:status])
-    if @order.status == 'ready'
+    @order.status = 'ready'
+    if @order.save
       order_publisher = Services::Post::CreateOrderWhisper.new
       update_event_listener = Listeners::UpdateEventListener.new
       order_publisher.publish_order_creation(@order)
@@ -67,8 +67,8 @@ class OrdersController < ApplicationController
   end
 
   def in_process
-    @order.update(status: params[:status])
-    if @order.status == 'in_process'
+    @order.status = 'ready'
+    if @order.save
       order_publisher = Services::Post::CreateOrderWhisper.new
       update_event_listener = Listeners::UpdateEventListener.new
       order_publisher.publish_order_creation(@order)
