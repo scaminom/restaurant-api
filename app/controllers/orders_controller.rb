@@ -67,7 +67,7 @@ class OrdersController < ApplicationController
   end
 
   def in_process
-    @order.status = 'ready'
+    @order.status = 'in_process'
     if @order.save
       order_publisher = Services::Post::CreateOrderWhisper.new
       update_event_listener = Listeners::UpdateEventListener.new
