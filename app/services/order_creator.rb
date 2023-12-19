@@ -11,8 +11,6 @@ class OrderCreator
       order.calculate_total
       order
     end
-  rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.error "Order creation failed: #{e.message}"
   end
 
   private

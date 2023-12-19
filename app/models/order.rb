@@ -13,8 +13,6 @@ class Order < ApplicationRecord
   belongs_to  :waiter, class_name: 'User', foreign_key: 'waiter_id'
   has_many    :items, foreign_key: 'order_number', primary_key: 'order_number'
 
-  # after_update :handle_completion
-
   enum status: {
     'pending': 1,
     'in_process': 2,
@@ -28,18 +26,5 @@ class Order < ApplicationRecord
     return if new_total == total
 
     update(total: new_total)
-  end
-
-  def self.process_next_order
-    next_order = Order.pending.order(:created_at).first
-    next_order&.in_process!
-  end
-
-  private
-
-  def handle_completion
-    return unless completed?
-
-    Order.process_next_order
   end
 end
