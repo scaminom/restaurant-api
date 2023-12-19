@@ -1,5 +1,5 @@
 class TablesController < ApplicationController
-  before_action :set_table, only: %i[show update destroy]
+  before_action :set_table, only: %i[show update destroy occupy release]
 
   def index
     tables = Table.all
