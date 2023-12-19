@@ -12,7 +12,8 @@ class Event < ApplicationRecord
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 
   validates :event_type,
-            inclusion: { in: %w[order_placed item_ready order_completed], message: 'is not a valid order type' }
+            inclusion: { in: %w[order_ready order_placed item_ready order_completed order_in_process],
+                         message: 'is not a valid order type' }
 
   before_save :set_occurred_at
 
