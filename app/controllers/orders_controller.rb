@@ -23,7 +23,7 @@ class OrdersController < ApplicationController
       order_publisher = Services::Post::CreateOrderWhisper.new
       order_publisher.publish_order_creation(@order)
       order_publisher.subscribe(Listeners::CreateEventListener.new.order_created(@order))
-      # Order.process_next_order
+      order_publisher.subscribe(Listeners::CreateEventListener.new.create_channel_order(@order))
       render json: { order: order_serializer(@order) }, status: :accepted
     else
       render json: @order.errors.full_messages, status: :unprocessable_entity
