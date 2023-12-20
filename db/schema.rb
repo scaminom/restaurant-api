@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_15_061854) do
 
   create_table "items", force: :cascade do |t|
     t.integer "quantity"
+    t.integer "status", default: 1
     t.decimal "unit_price", precision: 8, scale: 3
     t.decimal "subtotal", precision: 10, scale: 2
     t.bigint "product_id", null: false

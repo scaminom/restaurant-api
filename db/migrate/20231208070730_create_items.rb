@@ -2,6 +2,7 @@ class CreateItems < ActiveRecord::Migration[7.1]
   def change
     create_table :items do |t|
       t.integer :quantity
+      t.integer :status, default: 1
       t.decimal :unit_price, precision: 8, scale: 3
       t.decimal :subtotal, precision: 10, scale: 2
       t.references :product, null: false, foreign_key: true

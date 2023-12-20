@@ -1,5 +1,6 @@
 class ItemSerializer < Panko::Serializer
   attributes  :id,
+              :status,
               :quantity,
               :unit_price,
               :subtotal
