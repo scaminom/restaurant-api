@@ -1,7 +1,9 @@
 require_dependency '../services/post/create_order_whisper.rb'
 
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[show update destroy ready in_process]
+  before_action :authenticate_user!
+  load_and_authorize_resource
+  before_action :set_order, only: %i[show update destroy ready in_process dispatch_item]
 
   def index
     orders = Order.all
@@ -16,15 +18,11 @@ class OrdersController < ApplicationController
   end
 
   def create
-    order_creator = OrderCreator.new(order_params)
+    order_creator = OrderCreator.new(order_params, current_user)
     @order = order_creator.call
 
     if @order.save
-      order_publisher = Services::Post::CreateOrderWhisper.new
-      create_event_listener = Listeners::CreateEventListener.new
-      order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(create_event_listener.order_created(@order))
-      order_publisher.subscribe(create_event_listener.create_channel_order(@order))
+      OrderProcessingService.new(@order).process_order_on_create
       render json: { order: order_serializer(@order) }, status: :accepted
     else
       render json: @order.errors.full_messages, status: :unprocessable_entity
@@ -33,11 +31,7 @@ class OrdersController < ApplicationController
 
   def update
     if @order.update(order_params)
-      order_publisher = Services::Post::CreateOrderWhisper.new
-      update_event_listener = Listeners::UpdateEventListener.new
-      order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(update_event_listener.order_created(@order))
-      order_publisher.subscribe(update_event_listener.create_channel_order(@order))
+      OrderProcessingService.new(@order).process_order_on_update
       render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
@@ -55,11 +49,7 @@ class OrdersController < ApplicationController
   def ready
     @order.status = 'ready'
     if @order.save
-      order_publisher = Services::Post::CreateOrderWhisper.new
-      update_event_listener = Listeners::UpdateEventListener.new
-      order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(update_event_listener.order_ready(@order))
-      order_publisher.subscribe(update_event_listener.create_channel_order_ready(@order))
+      OrderProcessingService.new(@order).process_order_on_ready
       render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
@@ -69,14 +59,16 @@ class OrdersController < ApplicationController
   def in_process
     @order.status = 'in_process'
     if @order.save
-      order_publisher = Services::Post::CreateOrderWhisper.new
-      update_event_listener = Listeners::UpdateEventListener.new
-      order_publisher.publish_order_creation(@order)
-      order_publisher.subscribe(update_event_listener.order_in_process(@order))
+      OrderProcessingService.new(@order).process_order_in_process
       render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def dispatch_item
+    OrderDispatchService.new(@order).dispatch_item(params[:item_id])
+    render json: { order: order_serializer(@order) }
   end
 
   private

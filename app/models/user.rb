@@ -17,7 +17,8 @@ class User < ApplicationRecord
   enum role: {
     'admin': 1,
     'cook': 2,
-    'waiter': 3
+    'waiter': 3,
+    'cashier': 4
   }
 
   def jwt_payload

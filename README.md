@@ -13,3 +13,7 @@ In order to create an order you have to follow the nect body
 }
 
 You need to send this to this url http://localhost:3000/orders
+
+For dispatch an item you have to use the next url with the patch method
+
+patch '/orders/:id/dispatch_item/:item_id', to: 'orders#dispatch_item'

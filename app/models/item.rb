@@ -6,8 +6,7 @@ class Item < ApplicationRecord
   ].freeze
 
   validates_presence_of :quantity, :product_id, :order_number
-  v
-  alidates :status, inclusion: { in: %w[in_process completed], message: 'is not a valid status' }
+  validates :status, inclusion: { in: %w[in_process dispatched], message: 'is not a valid status' }
 
   belongs_to :product
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
@@ -16,7 +15,7 @@ class Item < ApplicationRecord
 
   enum status: {
     'in_process': 1,
-    'completed': 2
+    'dispatched': 2
   }
 
   private

@@ -1,12 +1,13 @@
 class OrderCreator
-  def initialize(order_params)
+  def initialize(order_params, current_user)
     @order_params = order_params
+    @current_user = current_user
   end
 
   def call
     Order.transaction do
-      order = Order.create!(@order_params.except(:items))
-      items_data = build_items_data(@order_params[:items], order)
+      order = Order.create!(@order_params.except(:items_attributes).merge(waiter_id: @current_user.id))
+      items_data = build_items_data(@order_params[:items_attributes], order)
       Item.insert_all!(items_data)
       order.calculate_total
       order

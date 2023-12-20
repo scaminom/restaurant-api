@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 ruby '3.2.2'
 
 gem 'bootsnap', require: false
+gem 'cancancan'
 gem 'devise'
 gem 'devise-jwt'
 gem 'factory_bot_rails'
