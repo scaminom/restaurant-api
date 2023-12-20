@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :invoices
   resources :events
   resources :items,     only: %i[index show create]
-  resources :orders,    only: %i[index show create update ready in_process dispatch_item]
+  resources :orders,    only: %i[index show create update in_process dispatch_item]
   resources :tables,    only: %i[index show update occupy release]
   resources :products,  only: %i[index show]
   resources :clients
@@ -30,7 +30,6 @@ Rails.application.routes.draw do
 
   resources :orders do
     member do
-      put 'ready'
       put 'in_process'
     end
   end

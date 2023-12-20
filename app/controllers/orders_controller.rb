@@ -3,7 +3,7 @@ require_dependency '../services/post/create_order_whisper.rb'
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-  before_action :set_order, only: %i[show update destroy ready in_process dispatch_item]
+  before_action :set_order, only: %i[show update destroy in_process dispatch_item]
 
   def index
     orders = Order.all
@@ -41,16 +41,6 @@ class OrdersController < ApplicationController
   def destroy
     if @order.destroy
       render json: { message: 'order deleted successfully' }
-    else
-      render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def ready
-    @order.status = 'ready'
-    if @order.save
-      OrderProcessingService.new(@order).process_order_on_ready
-      render json: { order: order_serializer(@order) }
     else
       render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
     end

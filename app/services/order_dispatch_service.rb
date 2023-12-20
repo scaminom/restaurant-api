@@ -16,6 +16,7 @@ class OrderDispatchService
     return unless @order.items.all? { |item| item.status == 'dispatched' }
 
     @order.update!(status: 'ready')
+    OrderProcessingService.new(@order).process_order_on_ready
   end
 
   def broadcast_dispatched_item(item)
