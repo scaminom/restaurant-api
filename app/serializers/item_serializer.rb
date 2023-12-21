@@ -5,5 +5,5 @@ class ItemSerializer < Panko::Serializer
               :unit_price,
               :subtotal
 
-  has_one :product, serializer: ProductSerializer, only: %i[name]
+  has_one :product, serializer: ProductSerializer, only: %i[name category]
 end
