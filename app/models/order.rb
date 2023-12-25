@@ -6,7 +6,8 @@ class Order < ApplicationRecord
   ].freeze
 
   validates_presence_of :status, :table_id
-  validates :status, inclusion: { in: %w[ready in_process pending completed], message: 'is not a valid status' }
+  validates :status,
+            inclusion: { in: %w[ready in_process pending dispatched completed], message: 'is not a valid status' }
 
   belongs_to  :table
   belongs_to  :waiter, class_name: 'User', foreign_key: 'waiter_id'
@@ -18,7 +19,8 @@ class Order < ApplicationRecord
     'pending': 1,
     'in_process': 2,
     'ready': 3,
-    'completed': 4
+    'dispatched': 4,
+    'completed': 5
   }
 
   def calculate_total
