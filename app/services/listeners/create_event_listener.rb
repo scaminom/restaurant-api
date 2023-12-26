@@ -5,7 +5,7 @@ module Listeners
                    description: 'Order placed to prepare')
     end
 
-    def create_channel_order(_order)
+    def create_channel_order
       ActionCable.server.broadcast('orders_channel',
                                    'Order created')
     end

@@ -8,7 +8,7 @@ class OrderProcessingService
     create_event_listener = Listeners::CreateEventListener.new
     order_publisher.publish_order_creation(@order)
     order_publisher.subscribe(create_event_listener.order_created(@order))
-    order_publisher.subscribe(create_event_listener.create_channel_order(@order))
+    order_publisher.subscribe(create_event_listener.create_channel_order)
   end
 
   def process_order_on_update
