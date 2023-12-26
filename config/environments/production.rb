@@ -2,7 +2,7 @@ require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   config.action_cable.allowed_request_origins = ['http://localhost:3000', 'https://websocketking.com',
-                                                 'http://localhost:5173', 'https://restaurant-uta.netlify.app/']
+                                                 'http://localhost:5173', 'https://restaurant-uta.netlify.app']
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
