@@ -15,6 +15,11 @@ module Listeners
                    description: 'Order is ready to delivery')
     end
 
+    def create_channel_order_in_process(order)
+      ActionCable.server.broadcast("orders_channel_#{order.waiter.username}",
+                                   "La orden #{order.order_number} esta en proceso")
+    end
+
     def create_channel_order_ready(order)
       ActionCable.server.broadcast("orders_channel_#{order.waiter.username}",
                                    "La orden #{order.order_number} esta lista para entregar")
