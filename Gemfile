@@ -14,6 +14,7 @@ gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 7.1.2'
+gem 'redis'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'wisper'
 
