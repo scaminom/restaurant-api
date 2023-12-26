@@ -1,5 +1,3 @@
-require_dependency '../services/post/create_order_whisper.rb'
-
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
