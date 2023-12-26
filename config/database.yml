@@ -20,6 +20,7 @@ test:
 
 production:
   <<: *default
+  url:  <%= ENV['DATABASE_URL'] %>
   database: restaurant_api_production
   username: restaurant_api_production_user
-  password: gvbSb9VmTvQDAQwiv7ggSUbW22faBB1l
+  password:  <%= ENV['RENDER_DEPLOY_DATABASE_PASSWORD'] %>
