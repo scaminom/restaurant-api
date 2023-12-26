@@ -1,5 +1,3 @@
-require_dependency 'services/post/create_order_whisper'
-
 class OrderProcessingService
   def initialize(order)
     @order = order
