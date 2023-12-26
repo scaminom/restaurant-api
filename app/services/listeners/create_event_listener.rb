@@ -7,7 +7,7 @@ module Listeners
 
     def create_channel_order
       ActionCable.server.broadcast('orders_channel',
-                                   'Order created')
+                                   'Orden creada')
     end
   end
 end

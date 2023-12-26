@@ -35,7 +35,7 @@ class OrderDispatchService
   def broadcast_dispatched_item(item)
     ActionCable.server.broadcast(
       "orders_channel_#{item.order.waiter.username}",
-      { message: "Item #{item.product.name} dispatched", item_id: item.id }
+      { message: "El item #{item.product.name} esta listo para servir", item_id: item.id }
     )
   end
 end
