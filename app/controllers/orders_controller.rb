@@ -59,6 +59,15 @@ class OrdersController < ApplicationController
     render json: { order: order_serializer(@order) }
   end
 
+  def dispatch_order
+    result = OrderDispatchStatusService.new(@order).dispatch_order_status
+    if result.save
+      render json: { order: order_serializer(result) }
+    else
+      render json: { errors: result.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_order

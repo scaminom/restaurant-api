@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   resources :orders do
     member do
       put 'in_process'
+      put 'dispatch_order'
     end
   end
 
