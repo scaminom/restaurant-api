@@ -18,7 +18,10 @@ if ENV['RAILS_ENV'] == 'production'
   workers worker_count if worker_count > 1
 end
 
-workers ENV.fetch('WEB_CONCURRENCY', 6)
+# Removed the problematic line as it's already included in the production condition above
+# workers Integer(ENV.fetch('WEB_CONCURRENCY') || 6
+
+preload_app!
 # Specifies the `worker_timeout` threshold that Puma will use to wait before
 # terminating a worker in development environments.
 worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
