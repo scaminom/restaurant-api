@@ -21,5 +21,5 @@ test:
 production:
   <<: *default
   database: restaurant_api_production
-  username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
-  password: <%= ENV['POSTGRES_PASSWORD'] || 'root' %>
+  username: restaurant_api_production_user
+  password: gvbSb9VmTvQDAQwiv7ggSUbW22faBB1l
