@@ -1,4 +1,4 @@
-require_dependency '../services/post/create_order_whisper.rb'
+require_dependency 'services/post/create_order_whisper'
 
 class OrderProcessingService
   def initialize(order)
