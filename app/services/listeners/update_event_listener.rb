@@ -16,7 +16,7 @@ module Listeners
     end
 
     def create_channel_order_updated(order)
-      ActionCable.server.broadcast("orders_channel_#{order.waiter.username}",
+      ActionCable.server.broadcast('orders_channel',
                                    "La orden #{order.order_number} fue actualizada")
     end
 
