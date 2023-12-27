@@ -12,6 +12,7 @@ class Item < ApplicationRecord
   belongs_to :order, foreign_key: 'order_number', primary_key: 'order_number'
 
   after_save :update_order_total
+  before_validation :set_unit_price_and_subtotal
 
   enum status: {
     'in_process': 1,
@@ -24,5 +25,10 @@ class Item < ApplicationRecord
     return unless order.present?
 
     order.calculate_total
+  end
+
+  def set_unit_price_and_subtotal
+    self.unit_price = product.price if unit_price.nil?
+    self.subtotal = quantity * unit_price if subtotal.nil?
   end
 end

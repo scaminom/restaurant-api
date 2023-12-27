@@ -16,7 +16,7 @@ class OrderProcessingService
     update_event_listener = Listeners::UpdateEventListener.new
     order_publisher.publish_order_creation(@order)
     order_publisher.subscribe(update_event_listener.order_modified(@order))
-    order_publisher.subscribe(update_event_listener.create_channel_order(@order))
+    order_publisher.subscribe(update_event_listener.create_channel_order_updated(@order))
   end
 
   def process_order_on_ready
