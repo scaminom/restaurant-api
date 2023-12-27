@@ -15,9 +15,9 @@ module Listeners
                    description: 'Order is ready to delivery')
     end
 
-    def create_channel_order_updated(order)
+    def create_channel_order_updated
       ActionCable.server.broadcast('orders_channel',
-                                   "La orden #{order.order_number} fue actualizada")
+                                   'La orden fue actualizada')
     end
 
     def create_channel_order_in_process(order)
