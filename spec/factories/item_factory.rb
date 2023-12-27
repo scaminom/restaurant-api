@@ -8,7 +8,7 @@ FactoryBot.define do
 
     after(:create) do |item|
       item.update(unit_price: item.product.price) if item.unit_price.nil?
-      item.calculate_subtotal
+      item.set_unit_price_and_subtotal
       item.save!
     end
   end

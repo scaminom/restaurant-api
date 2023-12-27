@@ -19,16 +19,16 @@ class Item < ApplicationRecord
     'dispatched': 2
   }
 
+  def set_unit_price_and_subtotal
+    self.unit_price = product.price if unit_price.nil?
+    self.subtotal = quantity * unit_price if subtotal.nil?
+  end
+
   private
 
   def update_order_total
     return unless order.present?
 
     order.calculate_total
-  end
-
-  def set_unit_price_and_subtotal
-    self.unit_price = product.price if unit_price.nil?
-    self.subtotal = quantity * unit_price if subtotal.nil?
   end
 end

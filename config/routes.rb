@@ -7,10 +7,10 @@ Rails.application.routes.draw do
   }
   resources :invoices
   resources :events
-  resources :items,     only: %i[index show create]
+  resources :items,     only: %i[index show create update destroy]
   resources :orders,    only: %i[index show create update in_process dispatch_item]
   resources :tables,    only: %i[index show update occupy release]
-  resources :products,  only: %i[index show]
+  resources :products,  only: %i[index show create update destroy]
   resources :clients
   resources :cooks
   resources :waiters

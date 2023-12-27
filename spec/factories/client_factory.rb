@@ -5,7 +5,6 @@ FactoryBot.define do
     address { Faker::Address.full_address }
     email { Faker::Internet.email }
     phone { Faker::PhoneNumber.phone_number }
-    date { Faker::Date.between(from: 1.year.ago, to: Date.today) }
     id_type { Faker::Number.between(from: 1, to: 2) }
   end
 end

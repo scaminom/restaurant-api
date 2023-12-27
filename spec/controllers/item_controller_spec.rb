@@ -27,7 +27,7 @@ RSpec.describe ItemsController, type: :controller do
         order_number: order.order_number
       }
     end
-    let(:invalid_params) { { item: attributes_for(:item, quantity: nil) } }
+    let(:invalid_params) { { item: attributes_for(:item, quantity: 0.0, product_id: product.id) } }
 
     context 'with valid parameters' do
       it 'creates a new item' do
