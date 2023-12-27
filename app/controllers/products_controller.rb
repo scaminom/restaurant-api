@@ -1,5 +1,7 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[show update destroy]
+  before_action :authenticate_user!
+  load_and_authorize_resource
 
   def index
     products = Product.all

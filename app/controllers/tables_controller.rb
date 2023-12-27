@@ -1,5 +1,7 @@
 class TablesController < ApplicationController
   before_action :set_table, only: %i[show update destroy occupy release]
+  before_action :authenticate_user!
+  load_and_authorize_resource
 
   def index
     tables = Table.all

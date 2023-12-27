@@ -29,17 +29,17 @@ class OrderCreator
       subtotal = calculate_subtotal(item, unit_price)
       item.merge(
         order_number: order.order_number,
-        unit_price:,
-        subtotal:
+        unit_price: unit_price.to_f,
+        subtotal: subtotal.to_f
       )
     end
   end
 
   def calculate_unit_price(product_prices, item)
-    product_prices[item[:product_id]]
+    product_prices[item[:product_id].to_i]
   end
 
   def calculate_subtotal(item, unit_price)
-    item[:quantity] * unit_price
+    item[:quantity].to_i * unit_price.to_f
   end
 end

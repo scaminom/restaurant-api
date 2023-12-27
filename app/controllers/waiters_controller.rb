@@ -1,7 +1,6 @@
 class WaitersController < ApplicationController
-  def new_order
-    # Logic for creating a new order
-  end
+  before_action :authenticate_user!
+  load_and_authorize_resource
 
   def index
     @orders = Order.where(waiter: current_user).order(created_at: :desc)
