@@ -4,7 +4,7 @@ FactoryBot.define do
     password { Faker::Internet.password }
     email { Faker::Internet.email }
     encrypted_password { Devise.friendly_token }
-    role { Faker::Number.between(from: 1, to: 3) }
+    role { Faker::Number.between(from: 1, to: 1) }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
   end
