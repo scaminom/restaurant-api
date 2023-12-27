@@ -15,7 +15,6 @@ ActiveRecord::Schema[7.1].define(version: 20_231_215_061_854) do
   enable_extension 'plpgsql'
 
   create_table 'clients', id: :string, force: :cascade do |t|
-    sce
     t.string 'first_name'
     t.string 'last_name'
     t.string 'address'
