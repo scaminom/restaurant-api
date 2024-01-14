@@ -24,7 +24,8 @@ class InvoiceCreator
 
   def update_order(order)
     order.status = 'completed'
-    order.table.status = 'free' if order.table
+    order.table.status = 'free' if order.table.status == 'occupied'
+    order.table.save!
     order.save
   end
 
