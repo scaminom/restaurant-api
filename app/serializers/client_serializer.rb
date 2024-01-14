@@ -5,6 +5,5 @@ class ClientSerializer < Panko::Serializer
               :address,
               :email,
               :phone,
-              :date,
               :id_type
 end

@@ -1,6 +1,5 @@
 class OrderSerializer < Panko::Serializer
   attributes  :order_number,
-              :date,
               :status,
               :total
 

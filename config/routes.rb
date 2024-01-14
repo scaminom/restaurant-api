@@ -5,7 +5,6 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
-  resources :invoices
   resources :events
   resources :items,     only: %i[index show create update destroy]
   resources :orders,    only: %i[index show create update in_process dispatch_item]
@@ -14,6 +13,8 @@ Rails.application.routes.draw do
   resources :clients
   resources :cooks
   resources :waiters
+  resources :invoices, only: %i[index show create]
+  resources :audits, only: [:index]
 
   namespace :api do
     namespace :v1 do

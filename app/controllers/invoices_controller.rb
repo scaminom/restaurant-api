@@ -15,7 +15,8 @@ class InvoicesController < ApplicationController
   end
 
   def create
-    @invoice = Invoice.new(invoice_params)
+    invoice_creator = InvoiceCreator.new(invoice_params)
+    @invoice = invoice_creator.call
 
     if @invoice.save
       render json: { invoice: invoice_serializer(@invoice) }, status: :accepted
