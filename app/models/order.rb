@@ -9,9 +9,9 @@ class Order < ApplicationRecord
   validates :status,
             inclusion: { in: %w[ready in_process pending dispatched completed], message: 'is not a valid status' }
 
-  belongs_to  :table
+  belongs_to :table
   belongs_to  :waiter, class_name: 'User', foreign_key: 'waiter_id'
-  has_many    :items, foreign_key: 'order_number', primary_key: 'order_number'
+  has_many    :items, foreign_key: 'order_number', primary_key: 'order_number', dependent: :destroy
 
   accepts_nested_attributes_for :items
 

@@ -14,6 +14,8 @@ class User < ApplicationRecord
     last_name
   ].freeze
 
+  has_many :orders, foreign_key: 'waiter_id', class_name: 'Order'
+
   enum role: {
     'admin': 1,
     'cook': 2,
