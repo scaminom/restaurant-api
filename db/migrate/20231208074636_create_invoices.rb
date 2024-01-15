@@ -5,8 +5,10 @@ class CreateInvoices < ActiveRecord::Migration[7.1]
       t.bigserial :invoice_number, null: false, primary_key: true
       t.integer :payment_method
       t.datetime :date
-      t.text :voucher_number, unique: true
+      t.text :voucher_number
     end
+
+    add_index :invoices, :voucher_number, unique: true
 
     add_reference :invoices, :client, null: false, foreign_key: true, type: :string
 
